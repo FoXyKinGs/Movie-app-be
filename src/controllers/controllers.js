@@ -1,8 +1,22 @@
-const { modelGetUser, modelSetUser, modelGetMovie } = require('../models/models')
+const { modelGetUser, 
+        modelSetUser, 
+        modelGetMovie,
+        modelGetDetailMovie} 
+= require('../models/models')
 const { json } = require('body-parser')
 const { response } = require('express')
 
 module.exports = {
+  detailMovie: (req, res) => {
+    const param = req.params.id
+    modelGetDetailMovie(param)
+    .then((response) => {
+      res.status(200).send(response)
+    })
+    .catch((err) => {
+      res.status(500).send('Internal Server Error')
+    })
+  },
   login: (req, res) => {
     const body = req.body
     modelGetUser(body.username)

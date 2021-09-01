@@ -4,7 +4,7 @@ module.exports = {
   authentication: (req, res, next) => {
     const headers = req.headers
     if(!headers.auth){
-      res.status(200).send(res, "Auth Required")
+      res.status(500).send("Auth Required")
     } else {
       modelGetUser(headers.auth)
       .then((response) => {
@@ -13,6 +13,9 @@ module.exports = {
         } else {
           res.status(500).send({message: 'Auth Does not valid'})
         }
+      })
+      .catch((err) => {
+        res.status(500).send("Internal Server Error")
       })
     }
   }

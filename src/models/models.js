@@ -1,6 +1,17 @@
 const conn = require('../config/db')
 
 module.exports = {
+  modelGetDetailMovie: (id) => {
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT * FROM movies WHERE id = '${id}'`, (err, result) => {
+        if(err) {
+          reject(new Error())
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
   modelGetMovie: () => {
     return new Promise((resolve, reject) => {
       conn.query('SELECT * FROM movies', (err, result) => {
