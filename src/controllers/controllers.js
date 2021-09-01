@@ -1,4 +1,4 @@
-const { modelGetUser, modelSetUser } = require('../models/models')
+const { modelGetUser, modelSetUser, modelGetMovie } = require('../models/models')
 const { json } = require('body-parser')
 const { response } = require('express')
 
@@ -18,7 +18,7 @@ module.exports = {
           })
         }
       } else {
-        res.status(200).send({message: 'Username not found'})
+        res.status(500).send({message: 'Username not found'})
       }
     })
   },
@@ -27,7 +27,7 @@ module.exports = {
     modelGetUser(body.username)
     .then((response) => {
       if(response.length > 0){
-        res.status(500).send({message: 'Username Has Been Used'})
+        res.status(200).send({code: 500, message: 'Username Has Been Used'})
       } else {
         const result = {
           username: body.username,
@@ -42,6 +42,15 @@ module.exports = {
           res.status(500).send({message: 'Internal Server Error'})
         })
       }
+    })
+    .catch((err) => {
+      res.status(500).send({message: 'Internal Server Error'})
+    })
+  },
+  movies: (req, res) => {
+    modelGetMovie()
+    .then((response) => {
+      res.status(200).send({message: 'success', data: response})
     })
     .catch((err) => {
       res.status(500).send({message: 'Internal Server Error'})
