@@ -1,7 +1,9 @@
 const { modelGetUser, 
         modelSetUser, 
         modelGetMovie,
-        modelGetDetailMovie} 
+        modelGetDetailMovie,
+        modelSetTransactionMembership,
+        modelGetOnlyActiveMembership,} 
 = require('../models/models')
 const { json } = require('body-parser')
 const { response } = require('express')
@@ -69,5 +71,29 @@ module.exports = {
     .catch((err) => {
       res.status(500).send({message: 'Internal Server Error'})
     })
-  }
+  },
+  transactionMembership: (req, res) => {
+    const body = req.body
+    const result = {
+      id_user: body.id_user,
+      id_membership: body.id_membership
+    }
+    modelSetTransactionMembership(result)
+    .then((response) => {
+      res.status(200).send({message: 'success'})
+    })
+    .catch((err) => {
+      res.status(500).send('Internal Server Error')
+    })
+  },
+  membership: (req, res) => {
+    const query = req.query
+    modelGetOnlyActiveMembership(query)
+    .then((response) => {
+      res.send(response)
+    })
+    .catch((err) => {
+      res.send('Internal Server Error')
+    })
+  },
 }
