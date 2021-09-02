@@ -45,6 +45,17 @@ module.exports = {
       })
     })
   },
+  modelSetTransactionMovie: (dataUser) => {
+    return new Promise((resolve, reject) => {
+      conn.query('INSERT INTO transaction_movie SET ? ', dataUser, (err, result) => {
+        if(err) {
+          reject(new Error())
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
   modelSetUser: (dataUser) => {
     return new Promise((resolve, reject) => {
       conn.query('INSERT INTO users SET ? ', dataUser, (err, result) => {
@@ -73,4 +84,20 @@ module.exports = {
       })
     })
   },
+  modelGetPurchasedMovie: ({username, movie}) => {
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT * FROM users u 
+      JOIN transaction_movie tm ON u.id = tm.id_user
+      JOIN movies m ON tm.id_movie = m.id
+      WHERE u.username = '${username}'
+      AND m.id = '${movie}'`,
+      (err, result) => {
+        if(err) {
+          reject(new Error())
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  }
 }
